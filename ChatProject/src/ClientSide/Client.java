@@ -1,41 +1,43 @@
 package ClientSide;
 
-import java.net.Socket;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
 import java.net.UnknownHostException;
 import java.net.InetAddress;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 public class Client {
-	
-	private BufferedReader input;
-	private BufferedWriter output;
-	private Socket client;
+	private DatagramSocket client;
+	private InetAddress IP = null;
+	private int port;
 	
 	public Client(String IP, int port) throws UnknownHostException, IOException {
-		client = new Socket(InetAddress.getByName(IP), port);
-		input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		output = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+		client = new DatagramSocket();
+		this.IP = InetAddress.getByName(IP);
+		this.port = port;
 	}
 	
 	public void send(String message) throws IOException {
-		output.write(message + "\n");
-		output.flush();
+		byte [] data = message.getBytes();
+		DatagramPacket packet = new DatagramPacket(data, data.length, IP, port);
+		client.send(packet);
 	}
 	
-	public BufferedReader getInputStream() {
-		return input;
+	public String receive() throws IOException {
+		byte [] data = new byte [1024];
+		DatagramPacket packet = new DatagramPacket(data, data.length, IP, port);
+		client.receive(packet);
+		data = packet.getData();
+		
+		return new String(data, 0, data.length);
 	}
 	
 	public void closeSocket() {
-		try {
 			client.close();
-			input.close();
-			output.close();
-		} catch (IOException e) { }
 	}
 	
+	public String getUserIP() {
+		return String.valueOf(IP);
+	}
+
 }

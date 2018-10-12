@@ -53,8 +53,7 @@ public class MainWindow extends JFrame{
 		
 		try {
 			client = new Client(IP, port);
-			client.send(time.format(new Date()) + ": User " + nickName + 
-					" has connected to the server with IP " + IP + ":" + port);
+			client.send("/user/" + nickName);
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(this, "Failed on connecting to the server", "Socket Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
@@ -66,7 +65,7 @@ public class MainWindow extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if (!isTextFieldEmpty()) {
 					try {
-						client.send(time.format(new Date()) + ": " + textField.getText());
+						client.send(time.format(new Date()) + "." + nickName + ": " + textField.getText());
 						textField.setText(null);
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(MainWindow.this, "Failed on sending", "Socket Error", JOptionPane.ERROR_MESSAGE);
@@ -88,8 +87,7 @@ public class MainWindow extends JFrame{
 			public void run() {
 				while (true) {
 					try {
-						String respond = client.getInputStream().readLine();
-						textArea.append(respond + "\n");
+						textArea.append(client.receive() + "\n");
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(MainWindow.this, "Failed on getting message from server", 
 								"Error", JOptionPane.ERROR_MESSAGE);

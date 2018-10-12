@@ -1,27 +1,17 @@
 package ServerSide;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
 
 public class Server {
 	
-	private ServerSocket server;
-	private Socket client;
-	private BufferedReader input;
-	private BufferedWriter output;
+	private DatagramSocket server;
 	private Thread serverThread;
 	
 	public Server(int port) throws IOException{
-		server = new ServerSocket(port);
+		server = new DatagramSocket(port);
 		System.out.println("Server has started");
-		client = server.accept();
-		input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		output = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 		serverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -37,15 +27,27 @@ public class Server {
 			public void run() {
 				try {
 					while (true) {
-						String message = input.readLine();
-						output.write(message + "\n");
-						output.flush();
+						byte [] data = new byte [1024];
+						DatagramPacket packet = new DatagramPacket(data, data.length);
+						server.receive(packet);
+						data = packet.getData();
+						server.send(process(packet));
 					}
 				} catch (IOException e) {}
 			}
 		});
 		
 		receivingThread.start();
+	}
+	
+	private DatagramPacket process(DatagramPacket packet) {
+		String message = new String(packet.getData());
+		if (message.startsWith("/user/")) {
+			message = message + " " + String.valueOf(packet.getAddress()) + ":" + packet.getPort();
+			byte [] data = message.getBytes();
+			return new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort());
+		}
+		return packet;
 	}
 	
 	public void closeSocket() throws IOException{

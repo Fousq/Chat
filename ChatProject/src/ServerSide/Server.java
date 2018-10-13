@@ -3,11 +3,13 @@ package ServerSide;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
+import java.util.ArrayList;
 
 public class Server {
 	
 	private DatagramSocket server;
 	private Thread serverThread;
+	private ArrayList <ServerClient> serverClients = new ArrayList <ServerClient>();
 	
 	public Server(int port) throws IOException{
 		server = new DatagramSocket(port);
@@ -30,8 +32,10 @@ public class Server {
 						byte [] data = new byte [1024];
 						DatagramPacket packet = new DatagramPacket(data, data.length);
 						server.receive(packet);
-						data = packet.getData();
-						server.send(process(packet));
+						data = process(packet).getData();
+						for (ServerClient serverClient : serverClients) {
+							server.send(new DatagramPacket(data, data.length, serverClient.getIP(), serverClient.getPort()));
+						}
 					}
 				} catch (IOException e) {}
 			}
@@ -43,8 +47,9 @@ public class Server {
 	private DatagramPacket process(DatagramPacket packet) {
 		String message = new String(packet.getData());
 		if (message.startsWith("/user/")) {
-			message = message + " " + String.valueOf(packet.getAddress()) + ":" + packet.getPort();
-			byte [] data = message.getBytes();
+			serverClients.add(new ServerClient(1, packet.getAddress(), packet.getPort()));
+			message = "";
+			byte [] data = new byte [1024];
 			return new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort());
 		}
 		return packet;

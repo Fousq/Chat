@@ -2,11 +2,8 @@ import java.awt.event.*;
 
 import ClientSide.Client;
 
-import ServerSide.ServerWindow;
-
 public class Source {
 
-	static ServerWindow serverWindow;
 	static LoginWindow loginWindow;
 	static MainWindow mainWindow;
 	static Client client;

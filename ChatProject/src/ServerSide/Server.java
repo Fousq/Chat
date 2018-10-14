@@ -9,14 +9,15 @@ public class Server {
 	
 	private DatagramSocket server;
 	private Thread serverThread;
+	private boolean running = false;
 	private ArrayList <ServerClient> serverClients = new ArrayList <ServerClient>();
 	
 	public Server(int port) throws IOException{
 		server = new DatagramSocket(port);
-		System.out.println("Server has started");
 		serverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				running = true;
 				receive();
 			}
 		}, "serverThread");
@@ -57,6 +58,10 @@ public class Server {
 	
 	public void closeSocket() throws IOException{
 		server.close();
+	}
+	
+	public boolean isRunning() {
+		return running;
 	}
 	
 }

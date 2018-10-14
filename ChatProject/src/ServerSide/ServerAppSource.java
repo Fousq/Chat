@@ -12,7 +12,10 @@ public class ServerAppSource {
 		serverWindow.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				serverWindow.closeSocket();
+				if (serverWindow.isRunning()) {
+					serverWindow.closeSocket();
+				}
+				//serverWindow.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 			}
 		});
 	}

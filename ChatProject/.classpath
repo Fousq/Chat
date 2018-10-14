@@ -6,10 +6,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/fous3/Documents/Java/Project1/commons-lang3-3.8.1/commons-lang3-3.8.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/fous3/Documents/Java/Project1/commons-lang3-3.8.1/commons-lang3-3.8.1-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/fous3/Documents/Java/Project1/commons-lang3-3.8.1/commons-lang3-3.8.1-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/fous3/Documents/Java/Project1/commons-lang3-3.8.1/commons-lang3-3.8.1-tests.jar"/>
-	<classpathentry kind="lib" path="C:/Users/fous3/Documents/Java/Project1/commons-lang3-3.8.1/commons-lang3-3.8.1-test-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-tests.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-test-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

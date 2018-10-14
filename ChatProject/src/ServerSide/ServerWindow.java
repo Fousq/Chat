@@ -85,4 +85,7 @@ public class ServerWindow extends JFrame{
 		} catch (IOException e) { }
 	}
 	
+	public boolean isRunning() {
+		return (server != null)? server.isRunning() : false;
+	}
 }

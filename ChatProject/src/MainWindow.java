@@ -21,7 +21,7 @@ public class MainWindow extends JFrame{
 	private DateFormat time = new SimpleDateFormat("hh:mm:ss");
 	private JTextArea textArea;
 	
-	public MainWindow(int port, String IP, String nickName) {
+	public MainWindow(int port, String IP, String nickName, String conID) {
 		setSize(575, 410);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -42,8 +42,9 @@ public class MainWindow extends JFrame{
 		getContentPane().add(btnSend);
 		
 		textArea = new JTextArea();
-		textArea.setColumns(106);
-		textArea.setRows(26);
+		textArea.setColumns(49);
+		textArea.setRows(20);
+		textArea.setSize(300, 150);
 		springLayout.putConstraint(SpringLayout.NORTH, textArea, 10, SpringLayout.NORTH, getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, textArea, 0, SpringLayout.WEST, textField);
 		textArea.setEditable(false);
@@ -53,7 +54,7 @@ public class MainWindow extends JFrame{
 		
 		try {
 			client = new Client(IP, port);
-			client.send("/user/" + nickName);
+			client.send(conID + nickName);
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(this, "Failed on connecting to the server", "Socket Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
@@ -65,7 +66,7 @@ public class MainWindow extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if (!isTextFieldEmpty()) {
 					try {
-						client.send(time.format(new Date()) + "." + nickName + ": " + textField.getText());
+						client.send(time.format(new Date()) + "." + nickName + ": " + textField.getText() + "\n");
 						textField.setText(null);
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(MainWindow.this, "Failed on sending", "Socket Error", JOptionPane.ERROR_MESSAGE);
@@ -87,7 +88,7 @@ public class MainWindow extends JFrame{
 			public void run() {
 				while (true) {
 					try {
-						textArea.append(client.receive() + "\n");
+						textArea.append(client.receive());
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(MainWindow.this, "Failed on getting message from server", 
 								"Error", JOptionPane.ERROR_MESSAGE);

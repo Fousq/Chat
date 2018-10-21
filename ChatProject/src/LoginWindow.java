@@ -5,11 +5,12 @@ public class LoginWindow extends JFrame{
 	private JTextField portTF;
 	private JTextField IPTF;
 	private JButton btnJoin;
+	private JButton btnCreateServer;
 	
 	public LoginWindow() {
 		createWelcomePanel();
 		setSize(280, 403);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		SpringLayout springLayout = new SpringLayout();
 		getContentPane().setLayout(springLayout);
@@ -51,9 +52,14 @@ public class LoginWindow extends JFrame{
 		IPTF.setColumns(10);
 		
 		btnJoin = new JButton("Join");
-		springLayout.putConstraint(SpringLayout.NORTH, btnJoin, 63, SpringLayout.SOUTH, IPTF);
-		springLayout.putConstraint(SpringLayout.EAST, btnJoin, 0, SpringLayout.EAST, lblNickName);
+		springLayout.putConstraint(SpringLayout.SOUTH, btnJoin, -10, SpringLayout.SOUTH, getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, btnJoin, -10, SpringLayout.EAST, getContentPane());
 		getContentPane().add(btnJoin);
+		
+		btnCreateServer = new JButton("Create Server");
+		springLayout.putConstraint(SpringLayout.WEST, btnCreateServer, 10, SpringLayout.WEST, getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, btnCreateServer, 0, SpringLayout.SOUTH, btnJoin);
+		getContentPane().add(btnCreateServer);
 		
 		setVisible(true);
 	}
@@ -64,6 +70,10 @@ public class LoginWindow extends JFrame{
 	
 	public JButton getBtnJoin() {
 		return btnJoin;
+	}
+	
+	public JButton getBtnCreateServer() {
+		return btnCreateServer;
 	}
 	
 	public boolean areTFsEmpty() {
@@ -81,5 +91,4 @@ public class LoginWindow extends JFrame{
 	public String getIP() {
 		return IPTF.getText();
 	}
-	
 }

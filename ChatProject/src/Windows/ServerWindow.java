@@ -1,4 +1,4 @@
-package ServerSide;
+package Windows;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import org.apache.commons.lang3.StringUtils;
+
+import ServerSide.Server;
 
 public class ServerWindow extends JFrame{
 	

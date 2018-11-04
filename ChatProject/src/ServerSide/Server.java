@@ -74,8 +74,9 @@ public class Server {
 	}
 	
 	public void closeSocket() throws IOException, SQLException{
-		server.close();
 		dataBase.deleteServer(serverName, serverPort);
+		server.close();
+		dataBase.close();
 	}
 	
 	public boolean isRunning() {

@@ -1,8 +1,7 @@
 import java.awt.event.*;
 
 import ClientSide.Client;
-
-import ServerSide.ServerWindow;
+import Windows.ServerWindow;
 
 public class Source {
 

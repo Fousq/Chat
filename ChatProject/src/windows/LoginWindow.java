@@ -1,14 +1,18 @@
-package Windows;
+package windows;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import DataBase.DataBase;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import dataBase.DataBase;
 
 public class LoginWindow extends JFrame{
 	
@@ -58,7 +62,20 @@ public class LoginWindow extends JFrame{
 		springLayout.putConstraint(SpringLayout.WEST, btnSighUp, 10, SpringLayout.WEST, getContentPane());
 		getContentPane().add(btnSighUp);
 		
+		try {
+			dataBase = new DataBase();
+		} catch (ClassNotFoundException | SQLException e1) {
+			JOptionPane.showMessageDialog(this, "Cannot connect to data base", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
 		setVisible(true);
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				closeDBConnection();
+			}
+		});
 	}
 	
 	public JButton getBtnLogIn() {
@@ -73,7 +90,17 @@ public class LoginWindow extends JFrame{
 		return nickNameTF.getText();
 	}
 	
+	public String getPassword() {
+		return new String(passwordField.getPassword());
+	}
+	
 	public boolean isUser(String name, String password) {
 		return dataBase.isUserExist(name, password);
+	}
+	
+	public void closeDBConnection() {
+		if (dataBase != null) {
+			dataBase.close();
+		}
 	}
 }

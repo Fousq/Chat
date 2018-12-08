@@ -1,4 +1,4 @@
-package Windows;
+package windows;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +14,7 @@ import javax.swing.SpringLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ServerSide.Server;
+import serverSide.Server;
 
 public class ServerWindow extends JFrame{
 	
@@ -66,10 +66,10 @@ public class ServerWindow extends JFrame{
 		
 		setVisible(true);
 		
-		/*btnLaunch.addActionListener(new ActionListener() {
+		btnLaunch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (isPort() && !NameTextField.getText().isEmpty()) {
+				if (isPort(getPort()) && !NameTextField.getText().isEmpty()) {
 					try {
 						server = new Server(NameTextField.getText(), Integer.parseInt(portTF.getText()));
 					} catch (NumberFormatException e) { 
@@ -84,7 +84,7 @@ public class ServerWindow extends JFrame{
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 						return;
-					}
+					}					
 					lblPort.setVisible(false);
 					portTF.setVisible(false);
 					btnLaunch.setVisible(false);
@@ -92,11 +92,12 @@ public class ServerWindow extends JFrame{
 					springLayout.putConstraint(SpringLayout.NORTH, lblServerHasStarted, 6, SpringLayout.SOUTH, lblPort);
 					springLayout.putConstraint(SpringLayout.WEST, lblServerHasStarted, 0, SpringLayout.WEST, lblPort);
 					getContentPane().add(lblServerHasStarted);
+					
 				} else {
 					JOptionPane.showMessageDialog(ServerWindow.this, "Please enter the port and the IP to connect the server", "Port Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
-		});*/
+		});
 			
 	}
 	

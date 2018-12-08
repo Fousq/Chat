@@ -1,16 +1,17 @@
-package Windows;
+package windows;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
 
-import DataBase.DataBase;
-import javax.swing.JButton;
+import dataBase.DataBase;
 
 public class ServerListWindow extends JFrame {
 	
@@ -19,7 +20,7 @@ public class ServerListWindow extends JFrame {
 	private JButton btnConnect;
 	
 	public ServerListWindow() {
-		//setSize(240, 480);
+		setSize(449, 339);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		SpringLayout springLayout = new SpringLayout();
@@ -32,15 +33,18 @@ public class ServerListWindow extends JFrame {
 		springLayout.putConstraint(SpringLayout.EAST, serverList, 424, SpringLayout.WEST, getContentPane());
 		getContentPane().add(serverList);
 		//new JScrollPane(serverList);
-		
-		JTable serverListTable = new JTable(dataBase.getCountOfServers(), 3);
-		serverListTable.setModel(dataBase.getServers());
+		//serverListTable.setModel(dataBase.getServers());
 		
 		try {
 			dataBase = new DataBase();
-		} catch (ClassNotFoundException | SQLException e) { }
+		} catch (ClassNotFoundException | SQLException e) {
+			JOptionPane.showMessageDialog(this, "Failed on connecting to data base", "Data Base Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		serverList.addTab("Test", new JTable(3, 3));
+		dataBase.setColumnNames("SELECT name, ip, port FROM servers");
+		dataBase.setData("SELECT name, ip, port FROM servers");
+		JTable serverListTable = new JTable(dataBase.getData(), dataBase.getColumnNames());
+		serverList.addTab("Server list", serverListTable);
 		
 		btnCreateServer = new JButton("Create Server");
 		springLayout.putConstraint(SpringLayout.NORTH, btnCreateServer, 8, SpringLayout.SOUTH, serverList);
@@ -53,6 +57,13 @@ public class ServerListWindow extends JFrame {
 		getContentPane().add(btnConnect);
 		
 		setVisible(true);
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				closeDBConnection();
+			}
+		});
 	}
 	
 	public JButton getBtnCreateServer() {
@@ -62,4 +73,11 @@ public class ServerListWindow extends JFrame {
 	public JButton getBtnConnect() {
 		return btnConnect;
 	}
+	
+	public void closeDBConnection() {
+		if (dataBase != null) {
+			dataBase.close();
+		}
+	}
+	
 }

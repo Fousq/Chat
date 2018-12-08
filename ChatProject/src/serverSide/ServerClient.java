@@ -1,4 +1,4 @@
-package ServerSide;
+package serverSide;
 
 import java.net.InetAddress;
 

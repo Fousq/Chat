@@ -1,4 +1,4 @@
-package ServerSide;
+package serverSide;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 
-import DataBase.DataBase;
+import dataBase.DataBase;
 
 public class Server {
 	
@@ -64,7 +64,7 @@ public class Server {
 			return new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort());
 		} else if (message.startsWith("/admin/")) {
 			try {
-				dataBase.addServer(serverName, serverPort, packet.getAddress().toString(), packet.getPort());
+				dataBase.addServer(serverName, serverPort, message.substring(6), packet.getAddress().toString(), packet.getPort());
 				serverClients.add(new ServerClient(packet.getAddress(), packet.getPort()));
 			} catch (SQLException e) { }
 			byte [] data = new byte [1024];

@@ -1,7 +1,7 @@
-package Windows;
+package windows;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import DataBase.DataBase;
+import dataBase.DataBase;
 
 public class RegistrationWindow extends JFrame {
 	
@@ -56,33 +56,43 @@ public class RegistrationWindow extends JFrame {
 		springLayout.putConstraint(SpringLayout.EAST, btnRegistrate, -66, SpringLayout.EAST, getContentPane());
 		getContentPane().add(btnRegistrate);
 		
-		setVisible(true);
-		
 		try {
 			dataBase = new DataBase();
-			btnRegistrate.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (!passwordTF.getText().isEmpty() && !nickNameTF.getText().isEmpty()) {
-						try {
-							dataBase.addUser(nickNameTF.getText(), passwordTF.getText());
-						} catch (SQLException e1) { }
-					} else {
-						JOptionPane.showMessageDialog(RegistrationWindow.this, "Please enter the nick name and password.",
-								"Warning", JOptionPane.INFORMATION_MESSAGE);
-					}
-				}
-			});
 		} catch (ClassNotFoundException | SQLException e) {
 			JOptionPane.showMessageDialog(this, "Failed on connecting to data base", "Data Base Error", JOptionPane.ERROR_MESSAGE);
 		}
+		
+		setVisible(true);
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				closeDBConnection();
+			}
+		});
+	}
+	
+	public String getNickName() {
+		return nickNameTF.getText();
+	}
+	
+	public String getPassword() {
+		return passwordTF.getText();
 	}
 	
 	public JButton getBtnRegistrate() {
 		return btnRegistrate;
 	}
 	
-	public void closeDB() {
+	public void addNewUser(String name, String password) throws SQLException {
+		dataBase.addUser(name, password);
+	}
+	
+	public boolean doesUserExist(String name) {
+		return dataBase.isNickNameTaken(name);
+	}
+	
+	public void closeDBConnection() {
 		if (dataBase != null) {
 			dataBase.close();
 		}

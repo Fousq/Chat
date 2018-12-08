@@ -1,4 +1,4 @@
-package Windows;
+package windows;
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
@@ -13,7 +13,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import ClientSide.Client;
+import clientSide.Client;
 
 
 public class MainWindow extends JFrame{
@@ -21,9 +21,10 @@ public class MainWindow extends JFrame{
 	private Client client;
 	private DateFormat time = new SimpleDateFormat("hh:mm:ss");
 	private JTextArea textArea;
+	private JTable usersList;
 	
 	public MainWindow(int port, String IP, String nickName, String conID) {
-		setSize(575, 410);
+		setSize(712, 410);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		SpringLayout springLayout = new SpringLayout();
@@ -39,17 +40,24 @@ public class MainWindow extends JFrame{
 		JButton btnSend = new JButton("Send");
 		springLayout.putConstraint(SpringLayout.NORTH, btnSend, 337, SpringLayout.NORTH, getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, btnSend, 6, SpringLayout.EAST, textField);
-		springLayout.putConstraint(SpringLayout.EAST, btnSend, -12, SpringLayout.EAST, getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, btnSend, 85, SpringLayout.EAST, textField);
 		getContentPane().add(btnSend);
 		
 		textArea = new JTextArea();
-		textArea.setColumns(49);
-		textArea.setRows(20);
-		textArea.setSize(300, 150);
+		textArea.setColumns(106);
+		textArea.setRows(26);
 		springLayout.putConstraint(SpringLayout.NORTH, textArea, 10, SpringLayout.NORTH, getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, textArea, 0, SpringLayout.WEST, textField);
 		textArea.setEditable(false);
 		getContentPane().add(textArea);
+		
+		usersList = new JTable();
+		springLayout.putConstraint(SpringLayout.NORTH, usersList, 10, SpringLayout.NORTH, getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, usersList, 6, SpringLayout.EAST, textArea);
+		springLayout.putConstraint(SpringLayout.SOUTH, usersList, 0, SpringLayout.SOUTH, textField);
+		springLayout.putConstraint(SpringLayout.EAST, usersList, -10, SpringLayout.EAST, getContentPane());
+		usersList.setSize(40, 30);
+		getContentPane().add(usersList);
 		
 		setVisible(true);
 		
@@ -102,5 +110,4 @@ public class MainWindow extends JFrame{
 	public void closeSocket() {
 		client.closeSocket();
 	}
-	
 }

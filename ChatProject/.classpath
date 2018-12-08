@@ -6,11 +6,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-tests.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-test-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Жанболат/Documents/GitRep/Chat/ChatProject/.settings/mysql-connector-java-8.0.12/mysql-connector-java-8.0.12.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="C:/Users/fous3/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fous3/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fous3/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fous3/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-tests.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fous3/Documents/GitRep/Chat/ChatProject/.settings/commons-lang3-3.8.1/commons-lang3-3.8.1-test-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fous3/Documents/GitRep/Chat/ChatProject/.settings/mysql-connector-java-8.0.12/mysql-connector-java-8.0.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

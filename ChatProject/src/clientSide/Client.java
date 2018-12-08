@@ -1,4 +1,4 @@
-package ClientSide;
+package clientSide;
 
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;

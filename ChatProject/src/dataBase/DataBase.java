@@ -1,4 +1,4 @@
-package DataBase;
+package dataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,14 +14,17 @@ public class DataBase {
 	private Connection connection = null;
 	private Statement statement = null;
 	private ResultSet resultSet = null;
+	private ResultSetMetaData resultSetMetaData = null;
 	private PreparedStatement preparedStatement = null;
 	private final int TRUE = 1;
 	private final int FALSE = 0;
+	private Vector<String> columnsName = null;
+	private Vector<Vector<Object>> datas = null;
 	
 	public DataBase() throws SQLException, ClassNotFoundException {
-		Class.forName("com.mysql.cj.Driver");
+		Class.forName("com.mysql.cj.jdbc.Driver");
 		
-		connection = DriverManager.getConnection("jdbc://localhost:3306.clientsdb?useSSL=false"
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/clientsdb?useSSL=false"
 				+ "&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false"
 				+ "&serverTimezone=UTC",
 				"root", "123456fifa");
@@ -32,16 +35,17 @@ public class DataBase {
 				+ " VALUES (?, ?);");
 		preparedStatement.setString(1, nickName);
 		preparedStatement.setString(2, password);
-		preparedStatement.executeQuery();
+		preparedStatement.executeUpdate();
 	}
 	
-	public void addServer(String name, int port, String adminIP, int adminPort) throws SQLException {
-		preparedStatement = connection.prepareStatement("INSERT INTO severs (name, port, adminIP, adminPort)"
-				+ " VALUES (?, ?, ?, ?);");
+	public void addServer(String name, int port, String admin, String adminIP, int adminPort) throws SQLException {
+		preparedStatement = connection.prepareStatement("INSERT INTO severs (name, port, admin, adminIP, adminPort)"
+				+ " VALUES (?, ?, ?, ?, ?);");
 		preparedStatement.setString(1, name);
 		preparedStatement.setInt(2, port);
-		preparedStatement.setString(3, adminIP);
-		preparedStatement.setInt(4, adminPort);
+		preparedStatement.setString(3, admin);
+		preparedStatement.setString(4, adminIP);
+		preparedStatement.setInt(5, adminPort);
 		preparedStatement.executeUpdate();
 	}
 	
@@ -83,14 +87,28 @@ public class DataBase {
 	}
 	
 	public boolean isUserExist(String name, String password) {
+		boolean exist;
 		try {
 			preparedStatement = connection.prepareStatement("SELECT * FROM users "
-					+ "WHERE ninckName = ? AND password = ?;");
+					+ "WHERE nickName = ? AND password = ?;");
 			preparedStatement.setString(1, name);
 			preparedStatement.setString(2, password);
 			resultSet = preparedStatement.executeQuery();
-		} catch (SQLException e) { }
-		return (resultSet != null)? true : false;
+			exist = resultSet.first(); 
+		} catch (SQLException e) { return true; }
+		return exist;
+	}
+	
+	public boolean isNickNameTaken(String nickName) {
+		boolean exist;
+		try {
+			preparedStatement = connection.prepareStatement("SELECT * FROM users "
+					+ "WHERE nickName = ?");
+			preparedStatement.setString(1, nickName);
+			resultSet = preparedStatement.executeQuery();
+			exist = resultSet.first();
+		} catch (SQLException e) { return true; }
+		return exist;
 	}
 	
 	public int getCountOfServers() {
@@ -102,33 +120,36 @@ public class DataBase {
 		return count;
 	}
 	
-	public DefaultTableModel getServers() {
-		DefaultTableModel dftm = null;
-		try {
-			resultSet = statement.executeQuery("SELECT name, ip, port FROM servers");
-			dftm = new DefaultTableModel(getData(resultSet, resultSet.getMetaData()),
-					getColumnNames(resultSet, resultSet.getMetaData()));
-		} catch (SQLException e) {
-		}
-		return dftm;
-	}
+//	public DefaultTableModel getServers() {
+//		DefaultTableModel dftm = null;
+//		try {
+//			resultSet = statement.executeQuery("SELECT name, ip, port FROM servers");
+//			dftm = new DefaultTableModel(getData(resultSet, resultSet.getMetaData()),
+//					getColumnNames(resultSet, resultSet.getMetaData()));
+//		} catch (SQLException e) {
+//		}
+//		return dftm;
+//	}
 	
-	private Vector<String> getColumnNames(ResultSet resultSet, 
-			ResultSetMetaData resultSetMetaData) {
-		Vector<String> columnNames = new Vector<>();
+	public void setColumnNames(String sqlCommand) {
+		columnsName = new Vector<>();
 		try {
+			preparedStatement = connection.prepareStatement(sqlCommand);
+			resultSet = preparedStatement.executeQuery();
+			resultSetMetaData = resultSet.getMetaData();
 			int columnCount = resultSetMetaData.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {
-				columnNames.add(resultSetMetaData.getColumnName(i));
+				columnsName.add(resultSetMetaData.getColumnName(i));
 			}
 		} catch (SQLException e) { }
-		return columnNames;
 	}
 	
-	private Vector<Vector<Object>> getData(ResultSet resultSet, 
-			ResultSetMetaData resultSetMetaData) {
-		Vector<Vector<Object>> datas = new Vector<>();
+	public void setData(String sqlCommand) {
+		datas = new Vector<>();
 		try {
+			preparedStatement = connection.prepareStatement(sqlCommand);
+			resultSet = preparedStatement.executeQuery();
+			resultSetMetaData = resultSet.getMetaData();
 			int columnCount = resultSetMetaData.getColumnCount();
 			Vector<Object> data = new Vector<>();
 			while (resultSet.next()) {
@@ -138,7 +159,19 @@ public class DataBase {
 				datas.add(data);
 			}
 		} catch (SQLException e) {	}
-		
+	}
+	
+	public Vector<String> getColumnNames() {
+		if (columnsName == null) {
+			return null;
+		}
+		return columnsName;
+	}
+	
+	public Vector<Vector<Object>> getData() {
+		if (datas == null) {
+			return null;
+		}
 		return datas;
 	}
 	

@@ -99,12 +99,12 @@ public class DataBase {
 		return exist;
 	}
 	
-	public boolean isNickNameTaken(String nickName) {
+	public boolean isNameTaken(String name, String dbName) {
 		boolean exist;
 		try {
-			preparedStatement = connection.prepareStatement("SELECT * FROM users "
-					+ "WHERE nickName = ?");
-			preparedStatement.setString(1, nickName);
+			preparedStatement = connection.prepareStatement("SELECT * FROM " + dbName
+					+ " WHERE nickName = ?");
+			preparedStatement.setString(1, name);
 			resultSet = preparedStatement.executeQuery();
 			exist = resultSet.first();
 		} catch (SQLException e) { return true; }

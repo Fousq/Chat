@@ -89,7 +89,7 @@ public class RegistrationWindow extends JFrame {
 	}
 	
 	public boolean doesUserExist(String name) {
-		return dataBase.isNickNameTaken(name);
+		return dataBase.isNameTaken(name, "users");
 	}
 	
 	public void closeDBConnection() {

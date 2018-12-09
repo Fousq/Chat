@@ -1,7 +1,5 @@
 package windows;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -16,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import serverSide.Server;
 
+import dataBase.DataBase;
+
 public class ServerWindow extends JFrame{
 	
 	private SpringLayout springLayout;
@@ -25,10 +25,9 @@ public class ServerWindow extends JFrame{
 	private JLabel lblPort;
 	private JTextField NameTextField;
 	private Server server;
+	private DataBase dataBase = null;
 	
 	public ServerWindow() {
-		createWelcomePanel();
-		
 		setSize(239, 189);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -64,45 +63,13 @@ public class ServerWindow extends JFrame{
 		getContentPane().add(NameTextField);
 		NameTextField.setColumns(10);
 		
-		setVisible(true);
+		try {
+			dataBase = new DataBase();
+		} catch (ClassNotFoundException | SQLException e) {
+			JOptionPane.showMessageDialog(this, "Failed on connecting to data base", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		btnLaunch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (isPort(getPort()) && !NameTextField.getText().isEmpty()) {
-					try {
-						server = new Server(NameTextField.getText(), Integer.parseInt(portTF.getText()));
-					} catch (NumberFormatException e) { 
-						return;
-					} catch (IOException e) {
-						e.printStackTrace();
-						JOptionPane.showMessageDialog(ServerWindow.this, "Failed on connecting the port", "Socket port", JOptionPane.ERROR_MESSAGE);
-						return;
-					} catch (SQLException e) {
-						e.printStackTrace();
-						return;
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-						return;
-					}					
-					lblPort.setVisible(false);
-					portTF.setVisible(false);
-					btnLaunch.setVisible(false);
-					JLabel lblServerHasStarted = new JLabel("Server " + NameTextField.getText() + "is working in port: " + portTF.getText());
-					springLayout.putConstraint(SpringLayout.NORTH, lblServerHasStarted, 6, SpringLayout.SOUTH, lblPort);
-					springLayout.putConstraint(SpringLayout.WEST, lblServerHasStarted, 0, SpringLayout.WEST, lblPort);
-					getContentPane().add(lblServerHasStarted);
-					
-				} else {
-					JOptionPane.showMessageDialog(ServerWindow.this, "Please enter the port and the IP to connect the server", "Port Error", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-			
-	}
-	
-	private void createWelcomePanel() {
-		JOptionPane.showMessageDialog(this, "This is a simple project to learn how to code.", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+		setVisible(true);	
 	}
 	
 	public JButton getBtnLaunch() {
@@ -151,9 +118,9 @@ public class ServerWindow extends JFrame{
 	}
 	
 	public void launchServer(String name, String port) {
-		if (isPort(port) && !name.isEmpty()) {
 			try {
 				server = new Server(name, Integer.parseInt(port));
+				dataBase.addServer(name, Integer.parseInt(port), server.getServerIP());
 			} catch (NumberFormatException e) { 
 				return;
 			} catch (IOException e) {
@@ -167,20 +134,14 @@ public class ServerWindow extends JFrame{
 				e.printStackTrace();
 				return;
 			}
-			lblPort.setVisible(false);
-			portTF.setVisible(false);
-			btnLaunch.setVisible(false);
-			JLabel lblServerHasStarted = new JLabel("Server " + NameTextField.getText() + "is working in port: " + portTF.getText());
-			springLayout.putConstraint(SpringLayout.NORTH, lblServerHasStarted, 6, SpringLayout.SOUTH, lblPort);
-			springLayout.putConstraint(SpringLayout.WEST, lblServerHasStarted, 0, SpringLayout.WEST, lblPort);
-			getContentPane().add(lblServerHasStarted);
-		} else {
-			JOptionPane.showMessageDialog(ServerWindow.this, "Please enter the port and the IP to connect the server", "Port Error", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 	
 	public boolean isRunning() {
 		return (server != null)? server.isRunning() : false;
+	}
+	
+	public boolean isNameTaken(String name) {
+		return dataBase.isNameTaken(name, "servers");
 	}
 	
 }

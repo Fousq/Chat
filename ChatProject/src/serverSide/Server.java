@@ -64,7 +64,7 @@ public class Server {
 			return new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort());
 		} else if (message.startsWith("/admin/")) {
 			try {
-				dataBase.addServer(serverName, serverPort, message.substring(6), packet.getAddress().toString(), packet.getPort());
+				dataBase.boundServerToUser(message.substring(6), packet.getAddress().toString(), packet.getPort(), serverName);
 				serverClients.add(new ServerClient(packet.getAddress(), packet.getPort()));
 			} catch (SQLException e) { }
 			byte [] data = new byte [1024];
@@ -81,6 +81,10 @@ public class Server {
 	
 	public boolean isRunning() {
 		return running;
+	}
+	
+	public String getServerIP() {
+		return String.valueOf(server.getLocalAddress());
 	}
 	
 }

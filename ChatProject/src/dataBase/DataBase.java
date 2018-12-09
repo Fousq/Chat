@@ -11,6 +11,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 public class DataBase {
+	
 	private Connection connection = null;
 	private Statement statement = null;
 	private ResultSet resultSet = null;
@@ -38,14 +39,24 @@ public class DataBase {
 		preparedStatement.executeUpdate();
 	}
 	
-	public void addServer(String name, int port, String admin, String adminIP, int adminPort) throws SQLException {
-		preparedStatement = connection.prepareStatement("INSERT INTO severs (name, port, admin, adminIP, adminPort)"
-				+ " VALUES (?, ?, ?, ?, ?);");
+	public void addServer(String name, int port, String IP) throws SQLException {
+		preparedStatement = connection.prepareStatement("INSERT INTO severs (name, port, ip)"
+				+ " VALUES (?, ?, ?);");
 		preparedStatement.setString(1, name);
 		preparedStatement.setInt(2, port);
-		preparedStatement.setString(3, admin);
-		preparedStatement.setString(4, adminIP);
-		preparedStatement.setInt(5, adminPort);
+		preparedStatement.setString(3, IP);
+		preparedStatement.executeUpdate();
+	}
+	
+	public void boundServerToUser(String adminName, String adminIP, int adminPort,
+			String serverName) throws SQLException {
+		preparedStatement = connection.prepareStatement("UPDATE servers "
+				+ "SET admin = ?, adminIP = ?, adminPort = ? "
+				+ "WHERE name = ?");
+		preparedStatement.setString(1, adminName);
+		preparedStatement.setString(2, adminIP);
+		preparedStatement.setInt(3, adminPort);
+		preparedStatement.setString(4, serverName);
 		preparedStatement.executeUpdate();
 	}
 	

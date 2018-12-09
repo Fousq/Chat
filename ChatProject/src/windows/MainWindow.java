@@ -17,11 +17,13 @@ import clientSide.Client;
 
 
 public class MainWindow extends JFrame{
+	
 	private JTextField textField;
 	private Client client;
 	private DateFormat time = new SimpleDateFormat("hh:mm:ss");
 	private JTextArea textArea;
 	private JTable usersList;
+	JMenuBar menuBar;
 	
 	public MainWindow(int port, String IP, String nickName, String conID) {
 		setSize(712, 410);
@@ -58,6 +60,8 @@ public class MainWindow extends JFrame{
 		springLayout.putConstraint(SpringLayout.EAST, usersList, -10, SpringLayout.EAST, getContentPane());
 		usersList.setSize(40, 30);
 		getContentPane().add(usersList);
+		
+		createMenuBar(conID);
 		
 		setVisible(true);
 		
@@ -105,6 +109,23 @@ public class MainWindow extends JFrame{
 				}
 			}
 		}).start();
+	}
+	
+	public void createMenuBar(String conID) {
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		JMenu serverMenu = new JMenu("Server");
+		if (conID.startsWith("/admin/")) {
+			JMenuItem manageServersUsersItem = new JMenuItem("Manage users");
+			serverMenu.add(manageServersUsersItem);
+			
+			JMenuItem closeServerItem = new JMenuItem("Close server");
+			serverMenu.add(closeServerItem);
+		}
+		JMenuItem exitServerItem = new JMenuItem("Exit server");
+		serverMenu.add(exitServerItem);
+		
+		menuBar.add(serverMenu);
 	}
 	
 	public void closeSocket() {

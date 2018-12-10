@@ -15,7 +15,10 @@ public class Server {
 	private String serverName;
 	private int serverPort;
 	private Thread serverThread;
+	private Thread receivingThread;
+	private Thread manage;
 	private boolean running = false;
+	private boolean readyToSend = true;
 	private ArrayList <ServerClient> serverClients = new ArrayList <ServerClient>();
 	private DataBase dataBase = null;
 	
@@ -29,6 +32,7 @@ public class Server {
 			@Override
 			public void run() {
 				running = true;
+				manage();
 				receive();
 			}
 		}, "serverThread");
@@ -36,7 +40,7 @@ public class Server {
 	}
 	
 	private void receive() {
-		Thread receivingThread = new Thread(new Runnable() {
+		receivingThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -56,6 +60,33 @@ public class Server {
 		receivingThread.start();
 	}
 	
+	private void manage() {
+		manage = new Thread(new Runnable() {
+			@Override 
+			public void run() {
+				try {
+					while (true) {
+						receivingThread.wait();
+						byte [] data = new byte [1024];
+						DatagramPacket packet = new DatagramPacket(data, data.length);
+						server.receive(packet);
+						String command = new String(packet.getData());
+						if (command.compareTo("!close") == 0) {
+							readyToSend = false;
+							closeSocket();
+						}
+						if (readyToSend) {
+							receivingThread.notify();
+						}
+					}
+				} catch (IOException | SQLException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	private DatagramPacket process(DatagramPacket packet){
 		String message = new String(packet.getData());
 		if (message.startsWith("/user/")) {

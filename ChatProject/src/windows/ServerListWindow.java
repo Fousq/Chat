@@ -18,6 +18,8 @@ public class ServerListWindow extends JFrame {
 	private DataBase dataBase = null;
 	private JButton btnCreateServer;
 	private JButton btnConnect;
+	private int selectedServerPort;
+	private String selectedServerIP = "localhost";
 	
 	public ServerListWindow() {
 		setSize(449, 339);
@@ -72,6 +74,14 @@ public class ServerListWindow extends JFrame {
 	
 	public JButton getBtnConnect() {
 		return btnConnect;
+	}
+	
+	public int getSelectedServerPort() {
+		return selectedServerPort;
+	}
+	
+	public String getSelectedServerIP() {
+		return selectedServerIP;
 	}
 	
 	public void closeDBConnection() {

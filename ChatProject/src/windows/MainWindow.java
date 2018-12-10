@@ -1,17 +1,23 @@
 package windows;
-import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.net.UnknownHostException;
-
 import java.io.IOException;
-
-import java.util.Date;
-
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
 import clientSide.Client;
 
@@ -23,7 +29,8 @@ public class MainWindow extends JFrame{
 	private DateFormat time = new SimpleDateFormat("hh:mm:ss");
 	private JTextArea textArea;
 	private JTable usersList;
-	JMenuBar menuBar;
+	private JMenuBar menuBar;
+	private JMenuItem exitServerItem;
 	
 	public MainWindow(int port, String IP, String nickName, String conID) {
 		setSize(712, 410);
@@ -117,15 +124,37 @@ public class MainWindow extends JFrame{
 		JMenu serverMenu = new JMenu("Server");
 		if (conID.startsWith("/admin/")) {
 			JMenuItem manageServersUsersItem = new JMenuItem("Manage users");
+			manageServersUsersItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
 			serverMenu.add(manageServersUsersItem);
 			
 			JMenuItem closeServerItem = new JMenuItem("Close server");
+			closeServerItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						client.send("!close");
+					} catch (IOException err) {
+						JOptionPane.showMessageDialog(MainWindow.this, "Failed on sending the command",
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
+			
 			serverMenu.add(closeServerItem);
 		}
-		JMenuItem exitServerItem = new JMenuItem("Exit server");
+		exitServerItem = new JMenuItem("Exit server");
 		serverMenu.add(exitServerItem);
 		
 		menuBar.add(serverMenu);
+	}
+	
+	public JMenuItem getExitServerItem() {
+		return exitServerItem;
 	}
 	
 	public void closeSocket() {

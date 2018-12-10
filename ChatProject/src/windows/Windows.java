@@ -15,6 +15,7 @@ public class Windows {
 	private ServerListWindow serverListWindow = null;
 	private RegistrationWindow registrationWindow = null;
 	private ServerWindow serverWindow = null;
+	private MainWindow mainWindow = null;
 	
 	public Windows() {
 		loginWindow = new LoginWindow();
@@ -88,7 +89,8 @@ public class Windows {
 		serverListWindow.getBtnConnect().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				mainWindow = new MainWindow(serverListWindow.getSelectedServerPort(),
+						serverListWindow.getSelectedServerIP(), user.getName(), "/user/");
 			}
 		});
 		
@@ -96,6 +98,7 @@ public class Windows {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				serverWindow = new ServerWindow();
+				serverWindowEvents();
 			}
 		});
 	}
@@ -107,6 +110,9 @@ public class Windows {
 				if (serverWindow.isPort(serverWindow.getPort()) && !serverWindow.getName().isEmpty()) {
 					serverWindow.launchServer(serverWindow.getName(), serverWindow.getPort());
 				}
+				
+				mainWindow = new MainWindow(Integer.parseInt(serverWindow.getPort()), 
+						"localhost", user.getName(), "/admin/");
 			}
 		});
 	}
